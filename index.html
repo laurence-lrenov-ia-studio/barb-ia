@@ -35,11 +35,12 @@ body{
   background:rgba(255,255,255,0.7);
 }
 
-.tabs-container{max-width:980px;margin:0 auto;padding:0 20px}
+.tabs-container{max-width:980px;margin:0 auto;padding:0 20px;position:relative}
 .tabs{
   display:flex;gap:6px;background:white;padding:8px;border-radius:22px;
   box-shadow:0 10px 40px rgba(255,107,157,0.12);margin-bottom:30px;
   position:sticky;top:20px;z-index:50;overflow-x:auto;scrollbar-width:none;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
 }
 .tabs::-webkit-scrollbar{display:none}
 .tab{
@@ -54,6 +55,32 @@ body{
   box-shadow:0 6px 20px rgba(255,107,157,0.35);
 }
 .tab svg{width:16px;height:16px;flex-shrink:0}
+
+/* Indicateur de scroll horizontal sur mobile */
+.scroll-hint{
+  display:none;position:absolute;top:28px;right:24px;z-index:51;
+  pointer-events:none;
+  background:linear-gradient(135deg,var(--coral),var(--lavender));
+  color:white;width:32px;height:32px;border-radius:50%;
+  align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(255,107,157,0.5);
+  animation:slide-hint 1.5s ease-in-out infinite;
+}
+.scroll-hint svg{width:16px;height:16px}
+@keyframes slide-hint{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(-6px)}
+}
+.scroll-hint.hidden{display:none !important}
+
+@media (max-width:700px){
+  .tab{
+    min-width:auto;padding:11px 12px;font-size:12px;flex:0 0 auto;
+  }
+  .tab svg{width:14px;height:14px}
+  .tabs{padding:6px}
+  .scroll-hint{display:flex}
+}
 
 .panel{display:none;animation:fadeIn 0.4s ease;padding-bottom:80px}
 .panel.active{display:block}
@@ -397,6 +424,10 @@ p{margin-bottom:12px;color:#555;font-size:15px}
     <button class="tab" data-tab="bar"><svg><use href="#i-glass"/></svg> ShakeNow!</button>
     <button class="tab" data-tab="formation"><svg><use href="#i-cap"/></svg> Formation</button>
     <button class="tab" data-tab="propo"><svg><use href="#i-sparkle"/></svg> Proposition</button>
+  </div>
+
+  <div class="scroll-hint" id="scrollHint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
   </div>
 
   <!-- ═══ TAB 1 — RÉUNION ═══ -->
@@ -926,15 +957,38 @@ p{margin-bottom:12px;color:#555;font-size:15px}
 <script>
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
+  const tabsContainer = document.querySelector('.tabs');
+  const scrollHint = document.getElementById('scrollHint');
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       panels.forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(tab.dataset.tab).classList.add('active');
+      // Scroll vers le tab cliqué pour qu'il soit visible
+      tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
       window.scrollTo({top: 0, behavior: 'smooth'});
     });
   });
+
+  // Cacher la flèche quand on a scrollé à droite
+  function updateScrollHint() {
+    if (!tabsContainer || !scrollHint) return;
+    const maxScroll = tabsContainer.scrollWidth - tabsContainer.clientWidth;
+    if (maxScroll <= 0 || tabsContainer.scrollLeft >= maxScroll - 10) {
+      scrollHint.classList.add('hidden');
+    } else {
+      scrollHint.classList.remove('hidden');
+    }
+  }
+
+  if (tabsContainer) {
+    tabsContainer.addEventListener('scroll', updateScrollHint);
+    window.addEventListener('resize', updateScrollHint);
+    window.addEventListener('load', updateScrollHint);
+    setTimeout(updateScrollHint, 100);
+  }
 </script>
 
 </body>
