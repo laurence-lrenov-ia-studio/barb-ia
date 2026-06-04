@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbara se met à l'IA ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#FF6B9D;--peach:#FFB78A;--lavender:#B19CD9;--mint:#6FCBA4;--sky:#8BC8F0;
+  --orange:#FF9F66;--cream:#FFF8F3;--dark:#2C2C3E;--gray:#9B9BAD;--light:#F4F0EB;--rose:#FFE5EE;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:linear-gradient(135deg,#FFF0F5 0%,#F0F8FF 50%,#FFF8F0 100%);
+  background-attachment:fixed;
+  font-family:'Outfit',sans-serif;min-height:100vh;color:var(--dark);line-height:1.6;
+}
+
+.hero{text-align:center;padding:60px 20px 30px;max-width:900px;margin:0 auto;position:relative}
+.hero::before,.hero::after{content:'';position:absolute;border-radius:50%;opacity:0.15;z-index:-1}
+.hero::before{width:280px;height:280px;background:radial-gradient(circle,var(--coral),transparent 70%);top:10px;left:5%}
+.hero::after{width:240px;height:240px;background:radial-gradient(circle,var(--lavender),transparent 70%);bottom:0;right:5%}
+.hero .greet{font-family:'Caveat',cursive;font-size:32px;color:var(--coral);font-weight:700;margin-bottom:8px}
+.hero h1{
+  font-size:clamp(36px,6vw,58px);font-weight:800;letter-spacing:-1.5px;line-height:1.05;
+  background:linear-gradient(135deg,var(--coral) 0%,var(--lavender) 50%,var(--mint) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:18px;
+}
+.hero .sub{font-size:17px;color:var(--gray);max-width:600px;margin:0 auto;font-weight:400}
+.hero .brand{
+  font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--coral);
+  margin-top:14px;display:inline-block;padding:6px 18px;border-radius:24px;
+  background:rgba(255,255,255,0.7);
+}
+
+.tabs-container{max-width:980px;margin:0 auto;padding:0 20px}
+.tabs{
+  display:flex;gap:6px;background:white;padding:8px;border-radius:22px;
+  box-shadow:0 10px 40px rgba(255,107,157,0.12);margin-bottom:30px;
+  position:sticky;top:20px;z-index:50;overflow-x:auto;scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:1;min-width:120px;padding:14px 14px;border-radius:16px;
+  font-family:inherit;font-size:13px;font-weight:600;border:none;background:transparent;
+  color:var(--gray);cursor:pointer;transition:all 0.3s ease;
+  display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;
+}
+.tab:hover{color:var(--dark)}
+.tab.active{
+  background:linear-gradient(135deg,var(--coral),var(--lavender));color:white;
+  box-shadow:0 6px 20px rgba(255,107,157,0.35);
+}
+.tab svg{width:16px;height:16px;flex-shrink:0}
+
+.panel{display:none;animation:fadeIn 0.4s ease;padding-bottom:80px}
+.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.section-title{
+  font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--coral);margin:32px 0 14px;display:flex;align-items:center;gap:12px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--coral),transparent);opacity:0.3}
+h2.big{font-size:28px;font-weight:800;letter-spacing:-0.8px;margin-bottom:12px;color:var(--dark)}
+h3{font-size:18px;font-weight:700;margin-bottom:10px;color:var(--dark);display:flex;align-items:center;gap:8px}
+h3 svg{width:20px;height:20px;flex-shrink:0}
+p{margin-bottom:12px;color:#555;font-size:15px}
+
+.card{
+  background:white;border-radius:22px;padding:26px 28px;margin-bottom:16px;
+  box-shadow:0 6px 30px rgba(0,0,0,0.04);border:1px solid rgba(255,255,255,0.8);
+}
+.card.coral-accent{border-left:4px solid var(--coral)}
+.card.mint-accent{border-left:4px solid var(--mint)}
+.card.lavender-accent{border-left:4px solid var(--lavender)}
+.card.peach-accent{border-left:4px solid var(--peach)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media (max-width:700px){.two-col{grid-template-columns:1fr}}
+
+.check-list{list-style:none;padding:0;margin:0}
+.check-list li{padding:12px 0;border-bottom:1px dashed rgba(0,0,0,0.06);font-size:15px;display:flex;gap:12px;align-items:flex-start}
+.check-list li:last-child{border-bottom:none}
+.check-list .ic{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.check-list .ic svg{width:20px;height:20px}
+.check-list .ic.coral{color:var(--coral)}
+.check-list .ic.mint{color:var(--mint)}
+.check-list .ic.lavender{color:var(--lavender)}
+.check-list .ic.peach{color:#E89055}
+.check-list .ic.gray{color:var(--gray)}
+
+.highlight{
+  background:linear-gradient(135deg,rgba(255,107,157,0.08),rgba(177,156,217,0.08));
+  border:2px dashed rgba(255,107,157,0.3);border-radius:18px;
+  padding:20px 24px;margin:18px 0;font-size:15px;
+}
+.highlight strong{color:var(--coral)}
+
+.univers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+@media (max-width:700px){.univers{grid-template-columns:1fr}}
+.uni-card{border-radius:20px;padding:22px;color:white;position:relative;overflow:hidden}
+.uni-card .uni-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:rgba(255,255,255,0.18);
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+}
+.uni-card .uni-icon svg{width:24px;height:24px;color:white}
+.uni-card h4{font-size:17px;font-weight:700;margin-bottom:6px;color:white}
+.uni-card p{font-size:13px;color:rgba(255,255,255,0.85);margin:0}
+.uni-card.perso{background:linear-gradient(135deg,var(--coral),#FF8FB8)}
+.uni-card.fit{background:linear-gradient(135deg,var(--lavender),#C8B5E8)}
+.uni-card.shake{background:linear-gradient(135deg,var(--mint),#8FD9B8)}
+
+.mockup-link{
+  display:block;text-decoration:none;color:inherit;
+  background:white;border-radius:22px;padding:24px 28px;margin:16px 0;
+  box-shadow:0 6px 30px rgba(0,0,0,0.04);
+  border:2px solid transparent;transition:all 0.3s ease;cursor:pointer;
+}
+.mockup-link:hover{
+  border-color:var(--coral);transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(255,107,157,0.15);
+}
+.mockup-link.fit-style{border-left:4px solid var(--coral)}
+.mockup-link.bar-style{border-left:4px solid var(--mint)}
+.mockup-link .ml-head{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.mockup-link .ml-icon{
+  width:50px;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.fit-style .ml-icon{background:linear-gradient(135deg,var(--coral),var(--peach));color:white}
+.bar-style .ml-icon{background:linear-gradient(135deg,var(--mint),var(--sky));color:white}
+.mockup-link .ml-icon svg{width:24px;height:24px}
+.mockup-link h4{font-size:17px;font-weight:700;margin-bottom:2px;color:var(--dark)}
+.mockup-link .ml-meta{font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;font-weight:600}
+.mockup-link p{font-size:14px;color:#555;margin:0}
+.mockup-link .ml-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:700;color:var(--coral);margin-top:12px;
+}
+.bar-style .ml-cta{color:var(--mint)}
+
+.demo-phone-wrap{display:flex;justify-content:center;margin:20px 0}
+.demo-phone{
+  width:240px;height:480px;background:#1a1a2e;border-radius:36px;padding:10px;
+  box-shadow:0 20px 50px rgba(255,107,157,0.2);position:relative;
+}
+.demo-phone::before{
+  content:'';position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  width:80px;height:20px;background:#000;border-radius:14px;z-index:10;
+}
+.demo-screen{
+  width:100%;height:100%;background:var(--cream);border-radius:26px;
+  padding:40px 20px 20px;overflow:hidden;position:relative;
+}
+.demo-logo{
+  font-size:20px;font-weight:800;letter-spacing:-0.5px;
+  background:linear-gradient(135deg,var(--coral),var(--lavender));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:16px;text-align:center;
+}
+.demo-greet{font-size:16px;font-weight:700;margin-bottom:14px}
+.demo-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.demo-stat{padding:12px;border-radius:14px;text-align:center}
+.demo-stat .n{font-size:22px;font-weight:800;line-height:1}
+.demo-stat .l{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
+.demo-stat.c1{background:rgba(255,107,157,0.12)}.demo-stat.c1 .n{color:var(--coral)}
+.demo-stat.c2{background:rgba(111,203,164,0.15)}.demo-stat.c2 .n{color:var(--mint)}
+.demo-mic{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,var(--coral),var(--peach));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(255,107,157,0.5);color:white;
+  animation:pulse-mic 2s infinite;
+}
+.demo-mic svg{width:26px;height:26px}
+@keyframes pulse-mic{0%,100%{box-shadow:0 8px 20px rgba(255,107,157,0.5)}50%{box-shadow:0 8px 30px rgba(255,107,157,0.8)}}
+
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media (max-width:700px){.pricing-grid{grid-template-columns:1fr}}
+.price-card{
+  background:white;border-radius:22px;padding:28px;position:relative;
+  border:2px solid transparent;transition:transform 0.2s ease;
+}
+.price-card:hover{transform:translateY(-3px)}
+.price-card.star{border-color:var(--coral);background:linear-gradient(135deg,white,rgba(255,107,157,0.04))}
+.price-card.star::before{
+  content:'✨ ON COMMENCE ICI';position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--coral),var(--lavender));color:white;
+  font-size:10px;font-weight:800;letter-spacing:1.5px;padding:5px 14px;
+  border-radius:20px;box-shadow:0 4px 12px rgba(255,107,157,0.3);
+}
+.price-tag{font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--coral);margin-bottom:4px}
+.price-card h3{font-size:20px;margin-bottom:12px}
+.price-amount{font-size:42px;font-weight:800;letter-spacing:-1px;color:var(--dark);line-height:1}
+.price-unit{font-size:13px;color:var(--gray);margin-top:4px;margin-bottom:16px}
+.price-card ul{list-style:none;padding:0;margin:14px 0 0}
+.price-card ul li{padding:8px 0;font-size:14px;display:flex;gap:8px;align-items:flex-start}
+.price-card ul li::before{
+  content:'';flex-shrink:0;width:16px;height:16px;margin-top:2px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236FCBA4' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-size:contain;
+}
+
+.seq{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.seq-step{display:flex;gap:16px;align-items:flex-start;background:white;border-radius:18px;padding:18px 22px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}
+.seq-num{
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:white;flex-shrink:0;
+}
+.seq-num.n1{background:linear-gradient(135deg,var(--coral),#FF8FB8)}
+.seq-num.n2{background:linear-gradient(135deg,var(--lavender),#C8B5E8)}
+.seq-num.n3{background:linear-gradient(135deg,var(--mint),#8FD9B8)}
+.seq-body{flex:1}
+.seq-body h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.seq-body p{font-size:14px;color:#666;margin:0}
+
+.cta-block{
+  background:linear-gradient(135deg,var(--coral),var(--lavender));border-radius:24px;
+  padding:36px 32px;text-align:center;color:white;margin:30px 0;position:relative;overflow:hidden;
+}
+.cta-block::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 50%);pointer-events:none;
+}
+.cta-block .tag{font-family:'Caveat',cursive;font-size:26px;font-weight:700;margin-bottom:8px}
+.cta-block h2{font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-bottom:14px;color:white;justify-content:center}
+.cta-block p{color:rgba(255,255,255,0.9);font-size:15px;margin-bottom:0}
+
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.badge{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:5px 12px;border-radius:12px}
+.b-coral{background:rgba(255,107,157,0.15);color:var(--coral)}
+.b-mint{background:rgba(111,203,164,0.18);color:var(--mint)}
+.b-lavender{background:rgba(177,156,217,0.18);color:var(--lavender)}
+.b-peach{background:rgba(255,183,138,0.22);color:#E89055}
+
+.formation-box{
+  background:linear-gradient(135deg,rgba(111,203,164,0.1),rgba(139,200,240,0.1));
+  border-radius:22px;padding:24px 28px;margin:16px 0;border:2px solid rgba(111,203,164,0.2);
+}
+.formation-tag{
+  display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:white;
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 12px;border-radius:12px;margin-bottom:12px;
+}
+.formation-tag svg{width:14px;height:14px}
+.formation-amount{display:flex;align-items:baseline;gap:8px;margin:8px 0 14px;flex-wrap:wrap}
+.formation-amount .big{font-size:36px;font-weight:800;color:var(--dark);letter-spacing:-1px}
+.formation-amount .sm{font-size:18px;font-weight:600;color:var(--gray)}
+.formation-amount .lbl{font-size:13px;color:var(--gray)}
+
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+@media (max-width:700px){.feature-grid{grid-template-columns:1fr}}
+.feature{
+  background:white;border-radius:18px;padding:20px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.04);
+}
+.feature .feature-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:10px;
+}
+.feature .feature-icon svg{width:22px;height:22px}
+.feature .fc-coral{background:rgba(255,107,157,0.12);color:var(--coral)}
+.feature .fc-mint{background:rgba(111,203,164,0.15);color:var(--mint)}
+.feature .fc-lavender{background:rgba(177,156,217,0.15);color:var(--lavender)}
+.feature .fc-peach{background:rgba(255,183,138,0.22);color:#E89055}
+.feature .fc-sky{background:rgba(139,200,240,0.18);color:var(--sky)}
+.feature .fc-orange{background:rgba(255,159,102,0.15);color:var(--orange)}
+.feature h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.feature p{font-size:13px;color:#666;margin:0;line-height:1.5}
+
+.bar-hero{
+  background:linear-gradient(135deg,rgba(111,203,164,0.15),rgba(255,159,102,0.15));
+  border-radius:22px;padding:30px 28px;margin-bottom:20px;text-align:center;
+}
+.bar-hero .bar-icon{
+  width:64px;height:64px;border-radius:20px;
+  background:linear-gradient(135deg,var(--mint),var(--coral));
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+  box-shadow:0 8px 20px rgba(111,203,164,0.3);
+}
+.bar-hero .bar-icon svg{width:32px;height:32px;color:white}
+.bar-hero h2{
+  font-size:30px;font-weight:800;letter-spacing:-0.8px;margin-bottom:10px;
+  background:linear-gradient(135deg,var(--mint),var(--coral));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  justify-content:center;
+}
+.bar-hero p{font-size:15px;color:var(--gray);margin:0}
+
+.footer{text-align:center;padding:30px 20px;color:var(--gray);font-size:13px;border-top:1px solid rgba(0,0,0,0.05);margin-top:40px}
+.footer strong{font-family:'Caveat',cursive;font-size:18px;color:var(--coral);display:block;margin-bottom:6px}
+
+.phone-illu{text-align:center;padding:20px}
+.phone-illu-label{font-family:'Caveat',cursive;font-size:18px;color:var(--coral);font-weight:600;margin-top:12px}
+
+.roi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}
+@media (max-width:700px){.roi-grid{grid-template-columns:1fr}}
+.roi-card{padding:18px;border-radius:16px;position:relative}
+.roi-card.time{background:linear-gradient(135deg,rgba(111,203,164,0.12),rgba(139,200,240,0.1))}
+.roi-card.money{background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(255,183,138,0.1))}
+.roi-card .roi-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.roi-card .roi-head svg{width:18px;height:18px}
+.roi-card.time .roi-head{color:var(--mint)}
+.roi-card.money .roi-head{color:var(--coral)}
+.roi-card .roi-head .label{font-family:'Caveat',cursive;font-size:18px;font-weight:700}
+.roi-card .roi-num{font-size:32px;font-weight:800;letter-spacing:-0.8px;color:var(--dark);line-height:1}
+.roi-card .roi-sub{font-size:12px;color:var(--gray);margin-top:6px}
+
+.roi-total{padding:18px;border-radius:16px;background:white;border:2px dashed rgba(255,107,157,0.3);text-align:center}
+.roi-total-label{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase;margin-bottom:6px}
+.roi-total-stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:8px}
+.roi-stat-sub{font-size:11px;color:var(--gray);margin-bottom:2px}
+.roi-stat-amount{font-size:22px;font-weight:800}
+.roi-divider{margin-top:14px;padding-top:14px;border-top:1px solid rgba(0,0,0,0.08)}
+.roi-invest{font-size:13px;color:var(--gray);margin-bottom:4px}
+.roi-invest-amount{font-size:18px;font-weight:700}
+.roi-conclusion{font-family:'Caveat',cursive;font-size:24px;color:var(--coral);font-weight:700;margin-top:8px}
+
+.zero-abo{
+  margin-top:16px;padding:12px;background:rgba(111,203,164,0.1);border-radius:12px;
+  font-size:13px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.zero-abo strong{color:var(--mint)}
+.zero-abo svg{width:16px;height:16px;color:var(--mint)}
+
+.elearning-card{
+  background:linear-gradient(135deg,rgba(177,156,217,0.1),rgba(139,200,240,0.1));
+  border-radius:18px;padding:20px 22px;margin-bottom:14px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.elearning-icon{
+  width:44px;height:44px;border-radius:13px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--lavender),var(--sky));
+  display:flex;align-items:center;justify-content:center;color:white;
+}
+.elearning-icon svg{width:22px;height:22px}
+.elearning-body h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.elearning-body p{font-size:13.5px;color:#555;margin:0;line-height:1.5}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+    <symbol id="i-glass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-9 11z"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></symbol>
+    <symbol id="i-flower" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2a3 3 0 0 0 0 6M12 22a3 3 0 0 0 0-6M2 12a3 3 0 0 0 6 0M22 12a3 3 0 0 0-6 0M5 5a3 3 0 0 0 4 4M19 5a3 3 0 0 1-4 4M5 19a3 3 0 0 1 4-4M19 19a3 3 0 0 0-4-4"/></symbol>
+    <symbol id="i-dumbbell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8v8M18 8v8M2 10v4M22 10v4M6 12h12"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44A2.5 2.5 0 0 1 4.5 17a2.5 2.5 0 0 1-1.5-3 2.5 2.5 0 0 1 0-4 2.5 2.5 0 0 1 1.5-3 2.5 2.5 0 0 1 2.54-2.94A2.5 2.5 0 0 1 9.5 2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44A2.5 2.5 0 0 0 19.5 17a2.5 2.5 0 0 0 1.5-3 2.5 2.5 0 0 0 0-4 2.5 2.5 0 0 0-1.5-3 2.5 2.5 0 0 0-2.54-2.94A2.5 2.5 0 0 0 14.5 2z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-money" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-dot" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></symbol>
+    <symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="21" x2="22" y2="21"/></symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M18 14h.01M9 14h6"/></symbol>
+  </defs>
+</svg>
+
+<div class="hero">
+  <div class="greet">Salut Barbara ✨</div>
+  <h1>Barbara<br>se met à l'IA</h1>
+  <div class="sub">Tu muscles le corps. Je te muscle l'IA. Voilà le récap de notre échange et ce que je te propose pour démarrer.</div>
+  <div class="brand">✨ Barb.IA — by L'Rénov IA Studio</div>
+</div>
+
+<div class="tabs-container">
+
+  <div class="tabs">
+    <button class="tab active" data-tab="reunion"><svg><use href="#i-chat"/></svg> Réunion</button>
+    <button class="tab" data-tab="crm"><svg><use href="#i-phone"/></svg> FitNow!</button>
+    <button class="tab" data-tab="bar"><svg><use href="#i-glass"/></svg> ShakeNow!</button>
+    <button class="tab" data-tab="formation"><svg><use href="#i-cap"/></svg> Formation</button>
+    <button class="tab" data-tab="propo"><svg><use href="#i-sparkle"/></svg> Proposition</button>
+  </div>
+
+  <!-- ═══ TAB 1 — RÉUNION ═══ -->
+  <div class="panel active" id="reunion">
+
+    <div class="section-title">Ce qu'on a posé ensemble</div>
+
+    <div class="card coral-accent">
+      <h2 class="big">On s'est compris ✨</h2>
+      <p>Tu n'as pas besoin de plus d'outils. Tu as besoin d'<strong>un système que tu vas vraiment utiliser</strong>. C'est exactement le cap qu'on a pris ensemble.</p>
+    </div>
+
+    <div class="section-title">Tes 3 univers de communication</div>
+
+    <div class="univers">
+      <div class="uni-card perso">
+        <div class="uni-icon"><svg><use href="#i-flower"/></svg></div>
+        <h4>Barbara perso</h4>
+        <p>Ton parcours, ta nutrition, ta communauté. Ton intime.</p>
+      </div>
+      <div class="uni-card fit">
+        <div class="uni-icon"><svg><use href="#i-dumbbell"/></svg></div>
+        <h4>Fit Club</h4>
+        <p>Petits groupes, convivialité, sport sans jugement.</p>
+      </div>
+      <div class="uni-card shake">
+        <div class="uni-icon"><svg><use href="#i-glass"/></svg></div>
+        <h4>Shake Nao</h4>
+        <p>Boissons saines, walk-in, énergie, lifestyle.</p>
+      </div>
+    </div>
+
+    <div class="card mint-accent">
+      <h3>Ce qu'on a déjà construit</h3>
+      <ul class="check-list">
+        <li><span class="ic coral"><svg><use href="#i-sparkle"/></svg></span><div><strong>Ton skill Claude "Barbara Instagram"</strong> — ton positionnement, ta cible, ton ton sont enregistrés.</div></li>
+        <li><span class="ic lavender"><svg><use href="#i-edit"/></svg></span><div><strong>Ta séquence stories prospect revisitée</strong> — passée de 7 à 4 étapes.</div></li>
+        <li><span class="ic mint"><svg><use href="#i-target"/></svg></span><div><strong>Tes priorités clarifiées</strong> — ton CRM en premier, ta formation en parallèle, le reste plus tard.</div></li>
+      </ul>
+    </div>
+
+    <div class="two-col">
+      <div class="card coral-accent">
+        <h3>Ce qui tourne</h3>
+        <ul class="check-list">
+          <li><span class="ic mint"><svg><use href="#i-check"/></svg></span>Wix + Stripe pour Fit Club</li>
+          <li><span class="ic mint"><svg><use href="#i-check"/></svg></span>SumUp pour tes ventes terrain</li>
+          <li><span class="ic mint"><svg><use href="#i-check"/></svg></span>Ton skill Claude Instagram</li>
+          <li><span class="ic mint"><svg><use href="#i-check"/></svg></span>Ton positionnement formalisé</li>
+        </ul>
+      </div>
+      <div class="card lavender-accent">
+        <h3>Ce qui ne tourne pas</h3>
+        <ul class="check-list">
+          <li><span class="ic coral"><svg><use href="#i-cross"/></svg></span>CRM Notion (non utilisé)</li>
+          <li><span class="ic coral"><svg><use href="#i-cross"/></svg></span>Suivi prospects sur cahier</li>
+          <li><span class="ic coral"><svg><use href="#i-cross"/></svg></span>Factures Gmail non classées</li>
+          <li><span class="ic coral"><svg><use href="#i-cross"/></svg></span>3 comptes Insta non coordonnés</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">Ce qu'on ne touche pas pour l'instant</div>
+
+    <div class="card">
+      <ul class="check-list">
+        <li><span class="ic gray"><svg><use href="#i-pause"/></svg></span><div><strong>Instagram DM auto</strong> — Meta bloque, et tu veux rester humaine sur ce canal. Tu as raison.</div></li>
+        <li><span class="ic gray"><svg><use href="#i-pause"/></svg></span><div><strong>Fidélité / parrainage</strong> — David compare les outils. On attend son retour.</div></li>
+        <li><span class="ic gray"><svg><use href="#i-pause"/></svg></span><div><strong>Click & collect Shake Nao</strong> — Wix + Stripe sont déjà là. On structurera ta base 62 drinks d'abord.</div></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ═══ TAB 2 — FitNow! ═══ -->
+  <div class="panel" id="crm">
+
+    <div class="section-title">Ton CRM perso</div>
+
+    <div class="card coral-accent">
+      <div class="badges">
+        <span class="badge b-coral">FitNow!</span>
+        <span class="badge b-mint">Mobile · Mac · iPad</span>
+        <span class="badge b-lavender">Parle ou écris</span>
+      </div>
+      <h2 class="big">Ton FitNow! dans ta poche</h2>
+      <p>C'est ton appli perso. Tu l'ouvres le matin, tu vois ton accueil Barb.IA avec ton bonjour, ta météo, tes bravos d'hier, et tes widgets. Tu cliques sur <strong>FitNow!</strong> et tu retrouves tous tes prospects : ceux du Fit Club, ceux de Shake Nao, ceux des deux.</p>
+      <p style="margin-top:10px"><strong>Pour ajouter une personne :</strong> tu cliques sur le micro et tu parles. Ou si tu préfères, tu tapes au clavier. C'est toi qui choisis selon le moment.</p>
+    </div>
+
+    <a href="fitnow-mockup.html" target="_blank" class="mockup-link fit-style">
+      <div class="ml-head">
+        <div class="ml-icon"><svg><use href="#i-phone"/></svg></div>
+        <div>
+          <h4>Voir l'aperçu mobile de Barb.IA</h4>
+          <div class="ml-meta">3 écrans iPhone · ton accueil, FitNow! et ShakeNow!</div>
+        </div>
+      </div>
+      <p>Clique pour voir à quoi ça ressemble : ton accueil avec les bravos et les widgets, FitNow! ouvert avec la saisie vocale ou clavier, et ShakeNow! avec l'alerte stock intelligente.</p>
+      <div class="ml-cta">Ouvrir l'aperçu <svg style="width:14px;height:14px"><use href="#i-arrow"/></svg></div>
+    </a>
+
+    <div class="phone-illu">
+      <div class="demo-phone-wrap">
+        <div class="demo-phone">
+          <div class="demo-screen">
+            <div class="demo-logo">✨ Barb.IA</div>
+            <div class="demo-greet">Bonjour Barbara</div>
+            <div class="demo-stats">
+              <div class="demo-stat c1"><div class="n">12</div><div class="l">Cette semaine</div></div>
+              <div class="demo-stat c2"><div class="n">5</div><div class="l">Converties</div></div>
+            </div>
+            <div style="font-size:11px;color:var(--gray);text-align:center;margin-top:20px">Appuie pour parler</div>
+            <div class="demo-mic"><svg><use href="#i-mic"/></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-illu-label">Ouvre, parle ou écris, c'est fait</div>
+    </div>
+
+    <div class="section-title">Comment tu l'utilises</div>
+
+    <div class="two-col">
+      <div class="card peach-accent">
+        <h3><svg style="color:#E89055"><use href="#i-mic"/></svg> Tu parles</h3>
+        <p style="font-size:14px">« Julie, rencontrée au Fit Club ce matin, elle veut essayer un cours mercredi, son numéro c'est le 06 12 34 56 78 »</p>
+      </div>
+      <div class="card mint-accent">
+        <h3><svg style="color:var(--mint)"><use href="#i-sparkle"/></svg> Ça se remplit</h3>
+        <p style="font-size:14px">Prénom : Julie · Source : Fit Club · Statut : Nouveau · Téléphone : 06 12 34 56 78</p>
+      </div>
+    </div>
+
+    <div class="card lavender-accent">
+      <h3>Où vont tes données</h3>
+      <p>Tout est stocké dans <strong>ton Google Sheets</strong>. Tu y as accès quand tu veux, depuis n'importe où. Tu peux trier, filtrer, exporter. C'est ta base à toi.</p>
+      <div class="highlight" style="margin-top:14px">
+        <strong>L'avantage :</strong> tu vois ton CRM se construire en direct. Tu comprends ce qui se passe derrière. Et si un jour tu veux changer un détail, tu peux le faire toi-même ou demander à Claude — pas besoin de me déranger pour chaque modif.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ TAB 3 — ShakeNow! ═══ -->
+  <div class="panel" id="bar">
+
+    <div class="bar-hero">
+      <div class="bar-icon"><svg><use href="#i-glass"/></svg></div>
+      <h2>ShakeNow!</h2>
+      <p>Ton co-pilote pour Shake Nao — branché sur tes ventes en direct</p>
+    </div>
+
+    <div class="section-title">L'idée en une phrase</div>
+
+    <div class="card mint-accent">
+      <p style="font-size:16px;margin:0">Pendant que tu fais tourner ton bar, l'IA observe tes ventes en arrière-plan. Elle te dit <strong>qui revient</strong>, <strong>ce qui marche</strong>, <strong>ce qui manque</strong> et <strong>quoi pousser</strong>. En temps réel, sur ton téléphone.</p>
+    </div>
+
+    <a href="shakenow-mockup.html" target="_blank" class="mockup-link bar-style">
+      <div class="ml-head">
+        <div class="ml-icon"><svg><use href="#i-glass"/></svg></div>
+        <div>
+          <h4>Voir l'aperçu mobile de ShakeNow!</h4>
+          <div class="ml-meta">Dans le mockup Barb.IA · 3e écran</div>
+        </div>
+      </div>
+      <p>Tu cliques sur l'aperçu, tu vois ton dashboard live avec ton CA et tes top drinks, l'alerte stock intelligente, et tout ce qui se passe au bar en temps réel.</p>
+      <div class="ml-cta">Ouvrir l'aperçu <svg style="width:14px;height:14px"><use href="#i-arrow"/></svg></div>
+    </a>
+
+    <div class="section-title">Ce que ShakeNow! fait pour toi</div>
+
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-icon fc-mint"><svg><use href="#i-chart"/></svg></div>
+        <h4>Dashboard live</h4>
+        <p>Ton CA du jour, comparé avec hier, tes top drinks de la semaine. Tu vois tout en 3 secondes.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon fc-coral"><svg><use href="#i-target"/></svg></div>
+        <h4>Recos clients</h4>
+        <p>Un habitué arrive ? L'IA te dit ce qu'il aime et te suggère un upsell (shot, complément).</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon fc-lavender"><svg><use href="#i-trend"/></svg></div>
+        <h4>Détection de tendance</h4>
+        <p>Un drink monte en flèche ? Tu le sais avant tout le monde. Tu peux le pousser en story.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon fc-orange"><svg><use href="#i-alert"/></svg></div>
+        <h4>Alerte stock intelligente</h4>
+        <p>Croise les recettes de tes drinks avec tes ventes. <strong>Anticipe les ruptures</strong> avant qu'elles arrivent.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon fc-peach"><svg><use href="#i-camera"/></svg></div>
+        <h4>Suggestions Insta</h4>
+        <p>L'IA prépare le texte de ta story du jour basé sur ce qui cartonne. Tu copies, tu postes.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon fc-sky"><svg><use href="#i-mic"/></svg></div>
+        <h4>Note vocale rapide</h4>
+        <p>« Sandra a kiffé le Berry Boost » → enregistré dans sa fiche en 2 secondes.</p>
+      </div>
+    </div>
+
+    <div class="card coral-accent">
+      <h3>Ton alerte stock intelligente</h3>
+      <p>ShakeNow! connaît <strong>les recettes de chacun de tes 62 drinks</strong>. En croisant avec tes ventes en temps réel, il calcule ta consommation par ingrédient. Tu ne seras plus jamais en rupture sans l'avoir vu venir.</p>
+      <ul class="check-list">
+        <li><span class="ic coral"><svg><use href="#i-alert"/></svg></span><div><strong>« Stock chocolat : 410g, rupture vendredi »</strong> → tu commandes aujourd'hui</div></li>
+        <li><span class="ic peach"><svg><use href="#i-trend"/></svg></span><div><strong>Rythme de conso calculé</strong> par ingrédient, mis à jour à chaque vente</div></li>
+        <li><span class="ic mint"><svg><use href="#i-check"/></svg></span><div><strong>Tu commandes au bon moment</strong>, ni trop tôt, ni trop tard</div></li>
+      </ul>
+    </div>
+
+    <div class="card lavender-accent">
+      <h3>Comment ça se branche</h3>
+      <ul class="check-list">
+        <li><span class="ic coral"><svg><use href="#i-card"/></svg></span><div><strong>Tes ventes SumUp</strong> remontent dans ton Google Sheets</div></li>
+        <li><span class="ic lavender"><svg><use href="#i-brain"/></svg></span><div><strong>L'IA analyse les patterns</strong> en arrière-plan : qui, quoi, quand, combien</div></li>
+        <li><span class="ic mint"><svg><use href="#i-phone"/></svg></span><div><strong>L'app affiche</strong> les recos et alertes en temps réel sur ton téléphone</div></li>
+        <li><span class="ic peach"><svg><use href="#i-lock"/></svg></span><div><strong>Tes données restent chez toi</strong> — dans ton Google Drive, pas chez un prestataire</div></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ═══ TAB 4 — FORMATION ═══ -->
+  <div class="panel" id="formation">
+
+    <div class="section-title">Ta formation IA</div>
+
+    <div class="formation-box">
+      <span class="formation-tag"><svg><use href="#i-heart"/></svg> Financée à 100 % par ton CPF</span>
+      <h2 class="big">Améliorer l'efficacité de ta TPE grâce à l'IA</h2>
+      <p>Une formation officielle, certifiée, finançable par ton Compte Personnel de Formation. <strong>Tu ne sors pas un euro.</strong></p>
+      <div class="formation-amount">
+        <span class="big">36h</span>
+        <span class="sm">·</span>
+        <span class="big">1 500 €</span>
+        <span class="lbl">forfait CPF · code RS7311</span>
+      </div>
+      <div class="badges">
+        <span class="badge b-mint">100% financé CPF</span>
+        <span class="badge b-coral">Certifié RS7311</span>
+        <span class="badge b-lavender">36h personnalisées</span>
+      </div>
+      <a href="https://www.moncompteformation.gouv.fr/espace-prive/html/#/formation/recherche/98248941100016_AETAIA/98248941100016_AETPEIA" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 22px;background:linear-gradient(135deg,var(--coral),var(--lavender));color:white;border-radius:14px;font-weight:700;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(255,107,157,0.3);transition:transform 0.2s ease">
+        <svg style="width:18px;height:18px"><use href="#i-arrow"/></svg>
+        Voir ma formation sur Mon Compte Formation
+      </a>
+    </div>
+
+    <div class="section-title">Comment elle se passe</div>
+
+    <div class="elearning-card">
+      <div class="elearning-icon"><svg><use href="#i-laptop"/></svg></div>
+      <div class="elearning-body">
+        <h4>E-learning à ton rythme</h4>
+        <p>Une grosse partie de la formation est en <strong>e-learning</strong>. Tu avances à ton rythme, quand tu veux, depuis ton Mac. Tu peux mettre pause et reprendre plus tard.</p>
+      </div>
+    </div>
+
+    <div class="elearning-card" style="background:linear-gradient(135deg,rgba(255,107,157,0.08),rgba(255,183,138,0.1))">
+      <div class="elearning-icon" style="background:linear-gradient(135deg,var(--coral),var(--peach))"><svg><use href="#i-calendar"/></svg></div>
+      <div class="elearning-body">
+        <h4>Créneaux en réel avec moi</h4>
+        <p>On a des <strong>horaires en réel</strong> pour échanger en direct sur ce que tu travailles. C'est là qu'on creuse tes vrais cas — tes factures, tes ventes SumUp, ton organisation.</p>
+      </div>
+    </div>
+
+    <div class="elearning-card" style="background:linear-gradient(135deg,rgba(111,203,164,0.1),rgba(139,200,240,0.1))">
+      <div class="elearning-icon" style="background:linear-gradient(135deg,var(--mint),var(--sky))"><svg><use href="#i-heart"/></svg></div>
+      <div class="elearning-body">
+        <h4>Et si tu coinces hors créneau ?</h4>
+        <p>Si tu butes sur quelque chose en dehors des créneaux prévus, <strong>je suis là pour t'appuyer</strong> même si ce n'était pas planifié. Tu ne restes pas bloquée.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Ce que tu vas apprendre</div>
+
+    <div class="card coral-accent">
+      <ul class="check-list">
+        <li><span class="ic coral"><svg><use href="#i-folder"/></svg></span><div><strong>Trier tes factures Gmail</strong> — méthode + petits scripts simples pour ranger tes PJ dans Drive par mois.</div></li>
+        <li><span class="ic mint"><svg><use href="#i-card"/></svg></span><div><strong>Exploiter tes ventes SumUp</strong> — récupérer tes données, croiser avec ton stock, suivre tes marges.</div></li>
+        <li><span class="ic lavender"><svg><use href="#i-chart"/></svg></span><div><strong>Gérer ton activité avec l'IA</strong> — utiliser Claude pour t'aider sur la gestion, les analyses, les décisions du quotidien.</div></li>
+        <li><span class="ic peach"><svg><use href="#i-edit"/></svg></span><div><strong>Maîtriser tes 3 skills Claude</strong> — perso / Fit Club / Shake Nao avec leurs propres règles.</div></li>
+        <li><span class="ic coral"><svg><use href="#i-target"/></svg></span><div><strong>Piloter avec tes propres tableaux</strong> — savoir ce qui marche, où mettre l'énergie.</div></li>
+      </ul>
+    </div>
+
+    <div class="highlight">
+      <strong>À noter :</strong> la formation t'apprend la <strong>gestion de ton activité avec l'IA</strong>, pas à coder des applis. Tes Applis Barb.IA, c'est moi qui les construis. La formation te rend autonome sur tout le reste : ton quotidien, tes factures, l'exploitation de tes données, l'utilisation pro de l'IA.
+    </div>
+
+    <div class="card mint-accent">
+      <h3>Et l'inscription ?</h3>
+      <p>C'est <strong>toi</strong> qui fais la demande sur Mon Compte Formation — c'est ton compte personnel, c'est ta démarche. Le lien direct vers ma formation est ci-dessus, tu cliques et tu suis les étapes. Je te guide si tu en as besoin.</p>
+    </div>
+
+  </div>
+
+  <!-- ═══ TAB 5 — PROPOSITION ═══ -->
+  <div class="panel" id="propo">
+
+    <div class="section-title">Ma proposition pour toi</div>
+
+    <div class="card coral-accent">
+      <h2 class="big">Tu choisis ton format ✨</h2>
+      <p>Deux formules au choix. Dans les deux cas : 4h ensemble en atelier, tu repars avec ton appli opérationnelle et tu sais t'en servir. Tout est compatible <strong>Mac + iPad + iPhone</strong> (mono-utilisateur).</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tag">Solo</div>
+        <h3>Barb.IA Solo</h3>
+        <div class="price-amount">590 €</div>
+        <div class="price-unit">HT · atelier 4h · acompte 30 %</div>
+        <ul>
+          <li>Ton appli <strong>Barb.IA</strong> avec accueil perso</li>
+          <li>Widget <strong>FitNow!</strong> (ton CRM prospects)</li>
+          <li>Tes bravos, ta météo et le conseil du jour à l'accueil</li>
+          <li>Saisie vocale + écrite au choix</li>
+          <li>Tes 3 skills Claude configurés</li>
+          <li>Mono-utilisateur · Mac + iPad + iPhone</li>
+        </ul>
+        <div class="zero-abo">
+          <svg><use href="#i-check"/></svg>
+          <strong>Tout est à toi · zéro abonnement</strong>
+        </div>
+      </div>
+
+      <div class="price-card star">
+        <div class="price-tag">Duo · recommandé</div>
+        <h3>Barb.IA Duo</h3>
+        <div class="price-amount">790 €</div>
+        <div class="price-unit">HT · atelier 4h · acompte 30 %</div>
+        <ul>
+          <li>Tout le <strong>Barb.IA Solo</strong></li>
+          <li>+ Widget <strong>ShakeNow!</strong> (ton bar live)</li>
+          <li>Connexion ventes SumUp</li>
+          <li><strong>Alerte stock intelligente</strong> (recettes × ventes)</li>
+          <li>Suggestions Insta automatiques</li>
+          <li>Mono-utilisateur · Mac + iPad + iPhone</li>
+        </ul>
+        <div class="zero-abo">
+          <svg><use href="#i-check"/></svg>
+          <strong>Tout est à toi · zéro abonnement</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Combien tu vas gagner avec ça</div>
+
+    <div class="card peach-accent">
+      <h3>Le calcul concret</h3>
+      <p style="font-size:14px;margin-bottom:18px;color:#555">Estimation conservatrice, basée sur ton activité actuelle. Les chiffres réels seront plus hauts.</p>
+
+      <div class="roi-grid">
+        <div class="roi-card time">
+          <div class="roi-head"><svg><use href="#i-clock"/></svg> <span class="label">Temps récupéré</span></div>
+          <div class="roi-num">3h / semaine</div>
+          <div class="roi-sub">≈ 144h sur l'année · plus de cahier, plus d'Excel éparpillé</div>
+        </div>
+        <div class="roi-card money">
+          <div class="roi-head"><svg><use href="#i-money"/></svg> <span class="label">Panier moyen</span></div>
+          <div class="roi-num">+ 1 €</div>
+          <div class="roi-sub">grâce aux recos upsell au bar (shot, complément...)</div>
+        </div>
+      </div>
+
+      <div class="roi-total">
+        <div class="roi-total-label">Tes gains estimés sur 1 an</div>
+        <div class="roi-total-stats">
+          <div>
+            <div class="roi-stat-sub">Temps valorisé</div>
+            <div class="roi-stat-amount" style="color:var(--mint)">~4 320 €</div>
+          </div>
+          <div>
+            <div class="roi-stat-sub">Upsell bar</div>
+            <div class="roi-stat-amount" style="color:var(--coral)">~4 500 €</div>
+          </div>
+          <div>
+            <div class="roi-stat-sub">Détection tendances</div>
+            <div class="roi-stat-amount" style="color:var(--lavender)">~1 500 €</div>
+          </div>
+        </div>
+        <div class="roi-divider">
+          <div class="roi-invest">Ton investissement année 1</div>
+          <div class="roi-invest-amount">790 €</div>
+          <div class="roi-conclusion">Tu rentres dans tes frais en moins de 2 mois ✨</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Comment ça se passe</div>
+
+    <div class="seq">
+      <div class="seq-step">
+        <div class="seq-num n1">1</div>
+        <div class="seq-body">
+          <h4>Je construis ton appli · 1 à 2 semaines</h4>
+          <p>Je prépare ton ou tes outils chez moi, je les teste, je les peaufine. Quand tu arrives à l'atelier, tout est déjà prêt.</p>
+        </div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-num n2">2</div>
+        <div class="seq-body">
+          <h4>Atelier 4h ensemble · on affine et tu prends en main</h4>
+          <p>On ajuste avec toi, je te montre comment ça marche, tu testes en direct. Tu repars en sachant t'en servir.</p>
+        </div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-num n3">3</div>
+        <div class="seq-body">
+          <h4>Déploiement sur tes appareils · Mac + iPad + iPhone</h4>
+          <p>Tu utilises ton appli dès le lendemain. Elle est à toi, sur tes comptes (Google, Apple). Pas de dépendance technique, pas d'abonnement.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Et si tu veux faire évoluer ton appli ?</div>
+
+    <div class="card lavender-accent">
+      <h3><svg style="color:var(--lavender)"><use href="#i-rocket"/></svg> Atelier évolution · 390 €</h3>
+      <p>Quand tu veux ajouter une fonctionnalité, ajuster quelque chose, ou faire le point sur ton appli :</p>
+      <ul class="check-list">
+        <li><span class="ic lavender"><svg><use href="#i-dot"/></svg></span>Atelier 4h ensemble — on regarde ce que tu veux bouger</li>
+        <li><span class="ic lavender"><svg><use href="#i-dot"/></svg></span>Mise à jour de ton appli si besoin</li>
+        <li><span class="ic lavender"><svg><use href="#i-dot"/></svg></span>Devis sur mesure pour les ajouts qui dépassent l'atelier</li>
+        <li><span class="ic lavender"><svg><use href="#i-dot"/></svg></span>Tu décides, à ton rythme — pas d'engagement</li>
+      </ul>
+    </div>
+
+    <div class="highlight">
+      <strong>L'astuce :</strong> ta formation CPF 36h va te rendre très autonome sur la gestion de ton activité. Pour les ajustements ponctuels sur ton appli, tu pourras souvent te débrouiller seule (ou avec Claude). On se revoit en atelier seulement quand tu as un vrai besoin d'évolution.
+    </div>
+
+    <div class="cta-block">
+      <div class="tag">Prête à démarrer ? ✨</div>
+      <h2>On planifie l'atelier ?</h2>
+      <p>Réponds-moi quand tu veux. Je te propose 2-3 créneaux et on cale.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Barb.IA ✨ by L'Rénov IA Studio</strong>
+  Laurence Borras · laurence@lrenov-ia.studio · 06 09 22 57 11
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+</script>
+
+</body>
+</html>
